@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oracolo di Morrigan</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      color: #222;
+      font-family: "Garamond", serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Full_Moon_Luc_Viatour.jpg/640px-Full_Moon_Luc_Viatour.jpg');
+      background-repeat: no-repeat;
+      background-position: top 2% right 2%;
+      background-size: 80px;
+    }
+
+    .sfera {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #dcdcdc 0%, #ffffff 70%, #ccc 100%);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+      margin: 20px auto;
+    }
+
+    h1 {
+      font-size: 2.0rem;
+      margin-bottom: 10px;
+    }
+
+    .profezia {
+      font-style: italic;
+      font-size: 1.6rem;
+      max-width: 600px;
+      margin: 20px auto;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+  </style>
+</head>
+<body>
+  <h1>Io sono la Morrigan, il mio dono è la verità.</h1>
+  <div class="sfera"></div>
+  <div class="profezia" id="profezia"></div>
+
+  <script>
+    const frasi = [
+      "Il caos ti segue perché sa che con te si diverte.",
+      "Quando pensano che tu sia finita, inizia il secondo atto.",
+      "Segui il tuo cuore. Ma portati dietro un drago per sicurezza.",
+      "La luna ride con te, mai di te.",
+      "Quando inciampi, pensa che stai solo provando nuove coreografie.",
+      "Il tuo futuro ha paura di te, e ha ragione.",
+     "Hai tagliato le catene solo per usarle come collana.",
+      "Le stelle non ti guidano: ti seguono.",
+      "Se ti senti persa, probabilmente sei in mezzo a una trilogia.",
+      "Ogni porta chiusa è solo un invito a entrare dalla finestra.",
+      "Hai fatto pace con il buio, ma lui ti teme ancora.",
+      "Se ti dicono che non puoi, prova a ridere mentre lo fai.",
+      "Hai trasformato ogni no in un trucco di scena.",
+      "Certe risposte non sono nella sfera. Sono nei capitoli che ti rifiuti di rileggere.",
+      "Non è confusione. È worldbuilding emotivo.",
+      "Le cicatrici sono segnalibri non ancora rimossi, puoi farcela.",
+      "A volte tener duro è solo girare pagina.",
+      "Ammetti di avere un villain interiore. Poi fagli fare un cameo.",
+      "Sei la prova che le fiabe funzionano meglio con un po' di fuoco.",
+      "La risposta che cerchi è dentro di te. Ma ha chiesto silenzio e una tazza di tè. Dalle tempo.",
+      "Il tuo potere non dorme. Sei tu che hai abbassato la voce.",
+      "Il buio ti teme perché non riesce a nasconderti.",
+      "Hai la tempesta dentro. Eppure aspetti il temporale fuori.",
+      "La tua luce fa paura solo a chi non ha mai acceso la propria.",
+      "Le stelle parlano chiaro: sei un casino incantevole.",
+      "Hai fatto del dubbio il tuo trampolino di lancio.",
+      "Ogni giorno che resisti, il tempo si inchina.",
+      "Il tuo spirito è una tempesta in una tazza di porcellana.",
+      "La tua verità taglia più di mille spade.",
+      "Brilla lo stesso. Falli accecare.",
+      "Non sei un enigma: sei la risposta che spaventa.",
+      "Le regole sono consigli travestiti. Ribellati con grazia.",
+      "Non sei nata per piacere, ma per incendiare.",
+      "Se ti dicono di abbassare la voce, ridi più forte.",
+      "Chi cerca di capirti finirà per perdersi. Ottima strategia.",
+      "Il tuo silenzio vale più di mille discorsi.",
+      "Hai imparato l’arte della guerra da ogni tua ferita.",
+      "La tua aura dice: 'Non sono qui per compiacere nessuno",
+      "Hai tutto per farli impazzire. Usa solo una parte.",
+      "Chi prova a spegnerti, si brucia le mani.",
+      "La tua pazienza ha le zanne.",
+      "Il tuo cuore sa danzare anche sulla rovina.",
+      "La verità? Sei troppo intensa per chi vive in modalità tutorial.",
+      "La tua furia ha eleganza.",
+      "Hai già vinto, ma lascia credere agli altri di avere una chance.",
+      "Sei la nota stonata che rende la melodia indimenticabile.",
+      "Le leggende ti aspettano: sei in ritardo solo per stile.",
+      "L’universo ti supporta. Anche se a volte si diverte a guardarti sbroccare.",
+      "Ti stai complicando la vita? Ottimo. È così che si crea una leggenda.",
+      "Hai chiesto luce? Ecco un lampo. Ora decidi tu dove colpire.",
+      "Non sei parte della stoira, ne sei il narratore. La scelta è tua.",
+      "Non sei troppo. Sei solo nel libro sbagliato. Cambia genere.",
+      "Cosa ti trattiene? Spoiler: niente che valga davvero la pena.",
+      "Se ti chiamano esagerata, ringrazia. Sei un evento climatico.",
+      "La tua versione migliore non è ancora legale in alcuni regni.",
+      "Non tutti possono stare nel tuo cerchio magico. E va bene così.",
+      "La tua indecisione è solo strategia.",
+      "Lascia che ti giudichino. È l’unica cosa interessante che faranno.",
+      "Ti hanno dato troppi limiti. Restituiscili.",
+      "Ogni volta che pensi troppo, una parte di te si annoia a morte.",
+      "Smetti di essere il finale pacifico. Sii il colpo di scena.",
+      "Il tuo futuro è luminoso. Indossa gli occhiali da sole e fai finta di niente.",
+      "Il tuo istinto ha ragione. Anche quando è scortese.",
+      "Se ti senti fuori posto, è perché sei troppo avanti per il copione.",
+      "I tuoi standard spaventano. Ma almeno filtrano il peggio.",
+      "Non cercare risposte fuori. Quelle dentro di te sono già abbastanza scomode.",
+      "Brilla. Tanto la modestia non ti ha mai vestita bene.",
+      "Non tutti ti capiscono. Alcuni nemmeno capiscono i cartelli ‘spingi’.",
+      "Sei a un bivio: o segui il cuore, o i tuoi piani vendicativi. Entrambi validi.",
+      "Non è che sei troppo. È che loro sono con il volume basso.",
+      "Se ti senti fuori posto, è solo perché il posto era piccolo.",
+      "Smetti di cercarti nei riflessi degli altri. Il tuo specchio funziona benissimo.",
+      "Hai più risposte di quante ne fai vedere. Strategia eccellente.",
+      "La tua ironia è una forma di sopravvivenza magica. Continua a usarla.",
+      "Sei il tipo di persona che l’universo non osa ignorare.",
+      "Riesci a sembrare innocua. Finché non parli.",
+      "Non cercare il segno. Sei tu il segno.",
+      "Alcuni scelgono la pace. Tu, a volte, scegli il fuoco. Giustamente.",
+      "Quando tutto sembrerà perduto, sarai tu il caos che riscrive le regole.",
+      "Chi ti cerca per spegnerti, ignora il fuoco che porti dentro.",
+      "Nel momento più oscuro, il tuo sorriso sarà la luce più temuta.",
+      "Ogni tempesta ha una fine, ma il tuo cammino sarà sempre nel vento.",
+      "Nel momento in cui spezzerai la catena, sarai l’incubo dei tiranni.",
+      "Il fuoco nel tuo cuore non conosce limiti, solo opportunità.",
+      "Non temere di perdere chi non sa riconoscere il tuo valore.",
+      "Quando penseranno che ti sei fermata, sarai già ovunque.",
+      "Il potere non è dono, è conquista; e tu stai per reclamare il tuo trono.",
+      "Non lasciare che ti definiscano: sei l’eccezione alla regola.",
+      "In un mondo di marionette, sii la mano che taglia i fili.",
+      "Non cercare di domare la bestia dentro di te; lei è la tua vera forza.",
+      "Il destino ti ha scelto come lama e scudo, ma il tuo cuore è la tua più grande arma.",
+      "Chi osa sfidarti dimentica che il fuoco non chiede mai il permesso.",
+      "La tua ribellione sarà un ballo lento, fatto di passi sbagliati e risate fragorose.",
+      "La chiave che cerchi sarà nascosta nel sorriso di chi ti sottovaluta.",
+      "Non temere l’ombra, è lì per mostrarti quanto puoi brillare.",
+      "Le stelle cadenti sono solo applausi per chi osa.",
+      "L’oscurità è solo un sipario: dietro, tu danzi da regina.",
+      "Non tutte le tempeste distruggono, alcune ti fanno volare più in alto.",
+      "Quando il fuoco brucerà nel gelo, sarai tu a portare la primavera.",
+      "Non temere di perdere la strada: spesso è il modo migliore per crearne una nuova.",
+      "Sorridi ai tuoi nemici: non sanno ancora quanto li farai pentire.",
+      "Il vento porta via i ricordi, ma non il fuoco che porti dentro.",
+      "Nel gioco del destino, tu sei il jolly che nessuno si aspetta.",
+      "Sei nata sotto un cielo ribelle, non aspettarti costellazioni tranquille.",
+      "Quando la notte ti avvolge, ricorda: sei la luce che non smette mai di brillare.",
+      "Non cercare la tua stella polare, sii la stella che guida gli altri.",
+      "Ogni stella ha un segreto, il tuo è che non puoi essere contenuta.",
+      "Le stelle non chiedono permesso per brillare, e neanche tu dovresti farlo.",
+      "Se fossi una stagione, saresti primavera: un po’ imprevedibile, ma sempre promettente",
+      "Sei una supernova in un mondo di stelle spente.",
+      "Non aspettare che una stella cadente esaudisca i tuoi desideri: crea la tua scia luminosa.",
+      "Non preoccuparti, l’universo ha un piano. Anche se a volte sembra una bozza scritta di fretta.",
+      "Hai il carisma di un personaggio secondario che ruba tutta la scena.",
+      "Oggi le lune si sono allineate per farti l’occhiolino.",
+      "Hai l’aura un po’ storta. Segno che stai facendo tutto bene.",
+      "Hai un’aura glitterata con accesso limitato. Le fate chiedono l’invito.",
+      "Se la tua energia fosse un libro, sarebbe vietato ai minori di 500 anni.",
+      "Se ti senti persa, segui la terza nuvola a sinistra. Poi chiedi a un corvo.",
+      "Ti segue una buona stella. Ma si distrae facilmente.",
+      "Tutte le risposte sono dentro di te. Ma stanno facendo silenzio stampa. Dalle tempo.",
+      "Hai un’energia così rara che persino le stelle fanno refresh per seguirti.",
+      "Le tue decisioni sembrano impulsive, ma in realtà seguono un complicato piano astrale",
+      "Hai il passo da Valchiria in pausa caffè e la mente da stratega che ha già vinto.",
+      "Hai l’energia di chi sa danzare con i demoni e ridere durante l’apocalisse.",
+      "Hai l’aria di chi può negoziare con una creatura millenaria… e uscirne con un invito a cena.",
+      "Cammini come chi conosce ogni segreto della corte… e ha deciso di non condividerne nessuno.",
+      "Hai attirato l’attenzione di una creatura mistica. Ma ha carisma.",
+      "Una forza antica ti protegge. È sarcastica e adora i dolci.",
+      "Sei il tipo che negozia con antichi spiriti… e alla fine sono loro a chiedere un favore.",
+      "Cammini con la sicurezza di chi sa che la magia vera è tenere il controllo mentre il mondo impazzisce.",
+      "Il tuo carisma è così potente che persino le ombre si fanno avanti per farsi notare.",
+      "Le creature leggendarie ti osservano chiedendosi se tu sia il prossimo enigma da decifrare.",
+      "Ti muovi come chi sa che il vero potere sta nel sorriso che nascondi sotto la pelle.",
+      "Hai un talento innato per trasformare i drammi in spettacoli… e i nemici in fan entusiasti.",
+      "Le stelle ti guardano e pensano: ‘Ecco, quella sì che è una persona da seguire.",
+      "Non oggi, amore. Le stelle hanno il ciclo.",
+      "Segui il tuo cuore. E se sbaglia, dai la colpa alla sfera.",
+      "Il destino dice di sì. Il buon senso dice di no. Chi vince?",
+      "La sfera dice no. Ma puoi sempre ignorarla come fai con le red flag."
+    ];
+
+    const profezia = document.getElementById("profezia");
+    const scelta = frasi[Math.floor(Math.random() * frasi.length)];
+    profezia.innerText = '“' + scelta + '”';
+    setTimeout(() => profezia.style.opacity = 1, 500);
+  </script>
+</body>
+</html>
